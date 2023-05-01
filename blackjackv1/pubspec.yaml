@@ -30,8 +30,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  #animations
   lite_rolling_switch: ^0.1.0
 
+  # The playing_cards package for Flutter allows you to easily render playing cards from
+  # a standard 52 card deck. Good defaults are provided out of box, but full customization
+  # is possible if a style object is provided.
+  playing_cards: ^0.3.1+9
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
