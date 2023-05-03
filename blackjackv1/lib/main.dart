@@ -42,8 +42,11 @@ class FirstPage extends StatelessWidget //first page
             //onChanged: (value) => value
             children: [
               const SizedBox(height: 80),
-              Image.asset('assets/images/blackjack4.png', fit: BoxFit.contain),
-              const SizedBox(height: 20),
+            Transform.scale(
+              scale: 1.4, // change the scale factor as needed
+              child: Image.asset('assets/images/blackjack4.png'),
+            ),
+              const SizedBox(height: 40),
               SizedBox(
                 width: 135,
                 height: 50,
