@@ -4,6 +4,15 @@
 A new Flutter project.
 
 ## Getting Started
+1. Download the project.
+2. To install the dependencies, run the following command:
+```
+flutter pub get
+```
+3. To run the program, run the following command:
+```
+flutter run --no-sound-null-safety
+```
 
 This project is a starting point for a Flutter application.
 
