@@ -1,18 +1,23 @@
 import 'dart:io';
 
+import 'chipbet.dart';
+import 'options.dart';
 import 'package:flutter/material.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
+import 'package:playing_cards/playing_cards.dart';
 
 void main() => runApp(const MyApp());
-
 class MyApp extends StatelessWidget //myApp
 {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'This is our app',
-      home: FirstPage(),
+    return MaterialApp(
+      routes: {
+        'FirstPage':(context) => FirstPage(),
+        'SecondPage':(context) => SecondPage(),
+        'ThirdPage':(context) => ThirdPage(),
+        'HomeChip':(context) => HomeChip(),
+      }, initialRoute: 'FirstPage',
     );
   }
 }
@@ -20,7 +25,6 @@ class MyApp extends StatelessWidget //myApp
 class FirstPage extends StatelessWidget //first page
 {
   const FirstPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +53,7 @@ class FirstPage extends StatelessWidget //first page
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const SecondPage()), //inputs string into constructor
+                                HomeChip()), //inputs string into constructor
                       ); //push as SecondPage on top of stack
                     },
                     style: ElevatedButton.styleFrom(
@@ -143,166 +147,6 @@ class SecondPage extends StatelessWidget //first page
   } //scaffold
 } //second page
 
-class ThirdPage extends StatelessWidget //first page
-{
-  const ThirdPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: const Text(
-            "Options",
-            style: TextStyle(fontSize: 22.0),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.black),
-      body: DecoratedBox(
-        // BoxDecoration takes the image
-        decoration: const BoxDecoration(
-          // Image set to background of the body
-          image: DecorationImage(
-              image: AssetImage("assets/images/blackjackbackground3.png"),
-              fit: BoxFit.cover),
-        ),
-
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-              ),
-              const SizedBox(
-                height: 100.0,
-              ),
-              Container(
-                width: 120.0,
-                height: 50.0,
-                color: Colors.black,
-                alignment: Alignment.center,
-                child: const Text(
-                  "Sound",
-                  style: TextStyle(fontSize: 30.0, color: Colors.white),
-                ),
-              ),
-              const SizedBox(
-                height: 25.0,
-              ),
-              LiteRollingSwitch(
-                value: true,
-                textOn: "On",
-                textOff: "Off",
-                colorOn: Colors.black,
-                colorOff: Colors.grey,
-                iconOn: Icons.surround_sound,
-                iconOff: Icons.surround_sound_outlined,
-                textSize: 18.0,
-                onChanged: (bool position) {
-                  print('turned ${(position) ? 'on' : 'off'}');
-                },
-                onTap: () {},
-                onDoubleTap: () {},
-                onSwipe: () {},
-              ),
-              const SizedBox(
-                height: 25.0,
-              ),
-              Container(
-                width: 120.0,
-                height: 50.0,
-                color: Colors.black,
-                alignment: Alignment.center,
-                child: const Text(
-                  "Music",
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 25.0,
-              ),
-              LiteRollingSwitch(
-                value: true,
-                textOn: "On",
-                textOff: "Off",
-                colorOn: Colors.black,
-                colorOff: Colors.grey,
-                iconOn: Icons.music_note_rounded,
-                iconOff: Icons.music_note_outlined,
-                textSize: 18.0,
-                onChanged: (bool position) {
-                  print('turned ${(position) ? 'on' : 'off'}');
-                },
-                onTap: () {},
-                onDoubleTap: () {},
-                onSwipe: () {},
-              ),
-              const SizedBox(
-                height: 25.0,
-              ),
-              Container(
-                width: 150.0,
-                height: 50,
-                color: Colors.black,
-                alignment: Alignment.center,
-                child: const Text(
-                  "Vibration",
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 25.0,
-              ),
-              LiteRollingSwitch(
-                value: true,
-                textOn: "On",
-                textOff: "Off",
-                colorOn: Colors.black,
-                colorOff: Colors.grey,
-                iconOn: Icons.vibration_rounded,
-                iconOff: Icons.vibration_rounded,
-                textSize: 18.0,
-                onChanged: (bool position) {
-                  print('turned ${(position) ? 'on' : 'off'}');
-                },
-                onTap: () {},
-                onDoubleTap: () {},
-                onSwipe: () {},
-              ),
-              const SizedBox(
-                height: 25.0,
-              ),
-              SizedBox(
-                width: 120,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () {
-                      aboutPopUp(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      textStyle: const TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.bold),
-                      shape: const StadiumBorder(),
-                    ),
-                    child: const Text('Rules')),
-              ),
-            ],
-          ),
-        ), //Column)
-      ),
-    );
-
-    //Center
-  }
-
   aboutPopUp(BuildContext context) {
     showDialog(
         context: context,
@@ -357,4 +201,4 @@ class ThirdPage extends StatelessWidget //first page
           );
         });
   } //scaffold
-} //second page
+ //second page
