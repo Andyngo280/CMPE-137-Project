@@ -8,6 +8,11 @@ A new Flutter project.
 ```
 flutter pub get
 ```
+3. To run the program, run the following command:
+```
+flutter run --no-sound-null-safety
+```
+
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
