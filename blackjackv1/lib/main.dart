@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:blackjackv1/play.dart';
+
 import 'chipbet.dart';
-import 'options.dart';
 import 'package:flutter/material.dart';
 import 'package:playing_cards/playing_cards.dart';
+import 'options.dart';
 
 void main() => runApp(const MyApp());
 class MyApp extends StatelessWidget //myApp
@@ -13,10 +15,10 @@ class MyApp extends StatelessWidget //myApp
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        'FirstPage':(context) => FirstPage(),
-        'SecondPage':(context) => SecondPage(),
-        'ThirdPage':(context) => ThirdPage(),
-        'HomeChip':(context) => HomeChip(),
+        'FirstPage':(context) => const FirstPage(),
+        // 'SecondPage':(context) => SecondPage(),
+        'ThirdPage':(context) => const ThirdPage(),
+        'HomeChip':(context) => const HomeChip(),
       }, initialRoute: 'FirstPage',
     );
   }
@@ -115,40 +117,6 @@ class FirstPage extends StatelessWidget //first page
   } //scaffold
 } //first page
 
-class SecondPage extends StatelessWidget //first page
-{
-  const SecondPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: DecoratedBox(
-        // BoxDecoration takes the image
-        decoration: const BoxDecoration(
-          // Image set to background of the body
-          image: DecorationImage(
-              image: AssetImage("assets/images/blackjackbackground3.png"),
-              fit: BoxFit.cover),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            //crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 10), //SizedBox
-
-              ElevatedButton(
-                  child: const Text('2nd page, Go back'),
-                  onPressed: () {
-                    Navigator.pop(context); //pop the second page of the stack
-                  }), //Button
-            ],
-          ),
-        ), //Column)
-      ),
-    ); //Center
-  } //scaffold
-} //second page
 
   aboutPopUp(BuildContext context) {
     showDialog(

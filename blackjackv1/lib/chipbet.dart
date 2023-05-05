@@ -1,20 +1,5 @@
-import 'package:blackjackv1/main.dart';
 import 'package:flutter/material.dart';
-
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        'HomeChip': (context) => const HomeChip(),
-      },
-      initialRoute: 'HomeChip',
-    );
-  }
-}
+import 'play.dart';
 
 class HomeChip extends StatelessWidget {
   const HomeChip({super.key});
@@ -59,7 +44,7 @@ class BettingScreenState extends State<BettingScreen> {
 
   void _addBet() {
     if (totalBetAmount + betAmount > balance &&
-        totalBetAmount + betAmount <= 500) {
+        totalBetAmount + betAmount <= 0) {
       // bet is within balance limit, but insufficient funds
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -67,11 +52,11 @@ class BettingScreenState extends State<BettingScreen> {
           backgroundColor: Colors.red,
         ),
       );
-    } else if (totalBetAmount + betAmount > 1000) {
-      // bet is greater than balance limit
+    } else if (balance - betAmount < 0) {
+      // balance would become negative after deducting bet amount
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Maximum bet amount reached'),
+          content: Text('Insufficient Funds'),
           backgroundColor: Colors.red,
         ),
       );
@@ -85,18 +70,38 @@ class BettingScreenState extends State<BettingScreen> {
     }
   }
 
-  void _betAll() {
+  void _addTotalBetAmountToBalance(int amount) {
     setState(() {
-      betAmount = balance;
+      if (totalBetAmount > 0) {
+        balance += amount;
+        _resetTotalBetAmount();
+      }
     });
-    _addBet();
+  }
+  void _resetTotalBetAmount() {
+    setState(() {
+      totalBetAmount = 0;
+    });
+  }
+
+  void _updateBalance(int newBalance) {
+    setState(() {
+      balance = newBalance;
+    });
   }
 
   void _clearBet() {
     setState(() {
+      balance += totalBetAmount;
       betAmount = 0;
       totalBetAmount = 0;
+    });
+  }
+  void _reset() {
+    setState(() {
       balance = 1000;
+      betAmount = 0;
+      totalBetAmount = 0;
     });
   }
 
@@ -105,32 +110,45 @@ class BettingScreenState extends State<BettingScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(height: 220),
+        const SizedBox(height: 160),
+        SizedBox(
+          width: 120,
+          height: 50,
+          child: ElevatedButton(
+            onPressed: _reset,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF9A1B1B),
+              foregroundColor: Colors.white,
+              textStyle: const TextStyle(
+                  fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+            child: const Text('Reset'),
+          ),
+        ),
+        const SizedBox(height: 20),
         SizedBox(
           width: 150,
           height: 60,
           child: ElevatedButton(
             onPressed: () {
-              if (totalBetAmount + betAmount > balance) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Insufficient Funds'),
-                    backgroundColor: Colors.red,
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SecondPage(
+                    totalBetAmount: totalBetAmount,
+                    balance: balance,
+                    onWin: _addTotalBetAmountToBalance,
+                    onResetTotalBetAmount: _resetTotalBetAmount,
+                    onBalanceUpdate: _updateBalance,
                   ),
-                );
-              } else {
-                setState(() {
-                  totalBetAmount += betAmount;
-                  balance -= betAmount;
-                  betAmount = 0;
-                });
-              }
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF1A4678),
               foregroundColor: Colors.white,
               textStyle:
-                  const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
               shape: const StadiumBorder(),
             ),
             child: const Text('Deal!'),
@@ -144,7 +162,9 @@ class BettingScreenState extends State<BettingScreen> {
               width: 100,
               height: 50,
               child: ElevatedButton(
-                onPressed: balance <= 999 ? null : () {
+                onPressed: balance == 0
+                    ? null
+                    : () {
                   setState(() {
                     betAmount = balance;
                   });
@@ -181,12 +201,11 @@ class BettingScreenState extends State<BettingScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
             Text('Bank: \$$balance',
                 style:
-                    const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
             const SizedBox(width: 20),
-            Text('In: \$$totalBetAmount',
+            Text('Bet: \$$totalBetAmount',
                 style:
                 const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
           ],

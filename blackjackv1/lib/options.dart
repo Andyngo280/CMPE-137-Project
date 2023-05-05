@@ -41,6 +41,7 @@ class ThirdPage extends StatelessWidget //first page
                 height: 50.0,
                 color: Colors.black,
                 alignment: Alignment.center,
+
                 child: const Text(
                   "Sound",
                   style: TextStyle(fontSize: 30.0, color: Colors.white),
