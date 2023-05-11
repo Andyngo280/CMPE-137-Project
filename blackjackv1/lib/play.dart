@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'cardservice.dart';
-import 'cardsplay.dart';
+import 'dealer.dart';
+import 'service.dart';
 import 'chipbet.dart';
 import 'package:playing_cards/playing_cards.dart';
 
@@ -29,19 +29,23 @@ class SecondPage extends StatefulWidget {
 class SecondPageState extends State<SecondPage> {
   int _balance = 0;
   int _totalBetAmount = 0;
-  final cardService = CardServiceImpl();
+  final dealerService = Dealer();
   List<PlayingCard> playerHand = [];
-
+  List<PlayingCard> dealerHand= [];
 
   void _dealCards() {
     setState(() {
-      playerHand = cardService.drawCards(2);
-    });
+      playerHand.clear();
+      dealerHand.clear();
+      playerHand = dealerService.drawCards(2);
+      dealerHand = dealerService.drawCards(2);
+    }
+    );
   }
 
   void _hit() {
     setState(() {
-      playerHand.addAll(cardService.drawCards(1));
+      playerHand.addAll(dealerService.drawCards(1));
     });
   }
 
@@ -136,10 +140,22 @@ class SecondPageState extends State<SecondPage> {
               ),
               Expanded(
                 child: GridView.count(
-                  crossAxisCount: 4,
+                  padding: const EdgeInsets.all(10),
+                  crossAxisCount: 2,
                   children: playerHand.map((card) {
-                    return Image.asset(
-                      'assets/${card.value.name.toLowerCase()}_of_${card.suit.name.toLowerCase()}.png',
+                    return PlayingCardView(
+                      card: card,
+                    );
+                  }).toList(),
+                ),
+              ),
+              Expanded(
+                child: GridView.count(
+                  padding: const EdgeInsets.all(10),
+                  crossAxisCount: 2,
+                  children: dealerHand.map((card) {
+                    return PlayingCardView(
+                      card: card,
                     );
                   }).toList(),
                 ),
@@ -156,16 +172,7 @@ class SecondPageState extends State<SecondPage> {
                           fontSize: 32, fontWeight: FontWeight.bold)),
                 ],
               ),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 4,
-                  children: playerHand.map((card) {
-                    return Image.asset(
-                      'assets/${card.value.name.toLowerCase()}_of_${card.suit.name.toLowerCase()}.png',
-                    );
-                  }).toList(),
-                ),
-              ),
+
               ElevatedButton(
                 onPressed: _hit,
                 child: Text('Hit'),

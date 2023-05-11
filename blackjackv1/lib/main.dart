@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget //myApp
       routes: {
         'FirstPage':(context) => const FirstPage(),
         // 'SecondPage':(context) => SecondPage(),
-        'ThirdPage':(context) => const ThirdPage(),
+        // 'ThirdPage':(context) => const ThirdPage(),
         'HomeChip':(context) => const HomeChip(),
       }, initialRoute: 'FirstPage',
     );
@@ -73,27 +73,27 @@ class FirstPage extends StatelessWidget //first page
               ),
               //Button
               const SizedBox(height: 23),
-              SizedBox(
-                width: 132,
-                height: 47,
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const ThirdPage()), //inputs string into constructor
-                      ); //push as SecondPage on top of stack
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      textStyle: const TextStyle(
-                          fontSize: 26, fontWeight: FontWeight.bold),
-                      shape: const StadiumBorder(),
-                    ),
-                    child: const Text('Options')),
-              ),
+              // SizedBox(
+              //   width: 132,
+              //   height: 47,
+              //   child: ElevatedButton(
+              //       onPressed: () {
+              //         Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) =>
+              //                   const ThirdPage()), //inputs string into constructor
+              //         ); //push as SecondPage on top of stack
+              //       },
+              //       style: ElevatedButton.styleFrom(
+              //         backgroundColor: Colors.black,
+              //         foregroundColor: Colors.white,
+              //         textStyle: const TextStyle(
+              //             fontSize: 26, fontWeight: FontWeight.bold),
+              //         shape: const StadiumBorder(),
+              //       ),
+              //       child: const Text('Options')),
+              // ),
               const SizedBox(height: 23),
               SizedBox(
                 width: 88,

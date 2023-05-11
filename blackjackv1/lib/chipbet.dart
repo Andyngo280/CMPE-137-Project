@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'cardservice.dart';
+import 'dealer.dart';
 import 'play.dart';
 
 class HomeChip extends StatelessWidget {
