@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dealer.dart';
 import 'play.dart';
 
 class HomeChip extends StatelessWidget {

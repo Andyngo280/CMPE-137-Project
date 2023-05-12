@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dealer.dart';
+import 'service.dart';
 import 'chipbet.dart';
+import 'package:playing_cards/playing_cards.dart';
 
 class SecondPage extends StatefulWidget {
   final int totalBetAmount;
@@ -7,6 +10,7 @@ class SecondPage extends StatefulWidget {
   final Function(int) onWin;
   final Function() onResetTotalBetAmount;
   final Function(int) onBalanceUpdate;
+
 
   const SecondPage({
     Key? key,
@@ -25,6 +29,25 @@ class SecondPage extends StatefulWidget {
 class SecondPageState extends State<SecondPage> {
   int _balance = 0;
   int _totalBetAmount = 0;
+  final dealerService = Dealer();
+  List<PlayingCard> playerHand = [];
+  List<PlayingCard> dealerHand= [];
+
+  void _dealCards() {
+    setState(() {
+      playerHand.clear();
+      dealerHand.clear();
+      playerHand = dealerService.drawCards(2);
+      dealerHand = dealerService.drawCards(2);
+    }
+    );
+  }
+
+  void _hit() {
+    setState(() {
+      playerHand.addAll(dealerService.drawCards(1));
+    });
+  }
 
   @override
   void initState() {
@@ -110,6 +133,33 @@ class SecondPageState extends State<SecondPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 90),
+              Text('Click the button to deal 2 cards:'),
+              ElevatedButton(
+                onPressed: _dealCards,
+                child: Text('Deal'),
+              ),
+              Expanded(
+                child: GridView.count(
+                  padding: const EdgeInsets.all(10),
+                  crossAxisCount: 2,
+                  children: playerHand.map((card) {
+                    return PlayingCardView(
+                      card: card,
+                    );
+                  }).toList(),
+                ),
+              ),
+              Expanded(
+                child: GridView.count(
+                  padding: const EdgeInsets.all(10),
+                  crossAxisCount: 2,
+                  children: dealerHand.map((card) {
+                    return PlayingCardView(
+                      card: card,
+                    );
+                  }).toList(),
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -121,6 +171,11 @@ class SecondPageState extends State<SecondPage> {
                       style: const TextStyle(
                           fontSize: 32, fontWeight: FontWeight.bold)),
                 ],
+              ),
+
+              ElevatedButton(
+                onPressed: _hit,
+                child: Text('Hit'),
               ),
               ElevatedButton(
                 child: const Text('Win!'),
