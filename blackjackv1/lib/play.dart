@@ -49,6 +49,24 @@ class SecondPageState extends State<SecondPage> {
     });
   }
 
+  void _double(){
+    setState(() {
+      print("Double HIt");
+      int lengthPlayerHand = playerHand.length;
+      if (lengthPlayerHand == 2){
+        playerHand.addAll(dealerService.drawCards(1));
+        _totalBetAmount = _totalBetAmount * 2;
+          mapCardValueRules(playerHand);
+      }
+      print("Length of player hand  :  $playerHand");
+    });
+  }
+
+  void mapCardValueRules(List<PlayingCard> cards) {
+    List<PlayingCard> standardCards = cards
+        .where((card) => (0 <= card.value.index && card.value.index <= 11))
+        .toList();
+  }
   @override
   void initState() {
     super.initState();
@@ -178,6 +196,10 @@ class SecondPageState extends State<SecondPage> {
                 child: Text('Hit'),
               ),
               ElevatedButton(
+                  onPressed: _double,
+                  child: Text("Double")
+              ),
+              ElevatedButton(
                 child: const Text('Win!'),
                 onPressed: () {
                   widget.onWin(_totalBetAmount * 2); // Multiply the total bet amount by 2
@@ -193,11 +215,11 @@ class SecondPageState extends State<SecondPage> {
                   _loseBetAmount();
                 },
               ),
-              ElevatedButton(
-                  child: const Text('Go back'),
-                  onPressed: () {
-                    Navigator.pop(context); //pop the second page of the stack
-                  }), //Button//Button
+              // ElevatedButton(
+              //     child: const Text('Go back'),
+              //     onPressed: () {
+              //       Navigator.pop(context); //pop the second page of the stack
+              //     }), //Button//Button
             ],
           ),
         ), //Column)

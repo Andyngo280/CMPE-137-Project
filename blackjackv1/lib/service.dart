@@ -7,4 +7,6 @@ abstract class DealerService {
   List<PlayingCard> drawCards(int amount);
   void discardCard(PlayingCard card);
   void discardDeck(List<PlayingCard> cards);
+  // void getScore()
+
 }
