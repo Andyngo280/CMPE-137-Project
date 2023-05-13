@@ -47,17 +47,19 @@ class SecondPageState extends State<SecondPage> {
 
   int dealerAction(){
     int dealerScore = mapCardValueRules(dealerHand);
-    if(dealerScore < 11){
-      dealerHand = dealerService.drawCards(1);
+    int dealerCards = dealerHand.length;
+    print("Dealer card in hand: $dealerCards");
+    if(dealerScore <= 11) {
+      print("Dealer card in hand: $dealerCards");
+      dealerHand.addAll(dealerService.drawCards(1));
       dealerScore = mapCardValueRules(dealerHand);
-      if(dealerScore < 15){
-        dealerHand = dealerService.drawCards(1);
-        dealerScore = mapCardValueRules(dealerHand);
-      }
     }
-    if(dealerScore > 21){
-      _loseBetAmount();
+    if (dealerScore <= 15){
+      print("Dealer card in hand: $dealerCards");
+      dealerHand.addAll(dealerService.drawCards(1));
+      dealerScore = mapCardValueRules(dealerHand);
     }
+
     return dealerScore;
   }
 
