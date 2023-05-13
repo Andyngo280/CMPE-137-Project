@@ -45,23 +45,64 @@ class SecondPageState extends State<SecondPage> {
     );
   }
 
+  int dealerAction(){
+    int dealerScore = mapCardValueRules(dealerHand);
+    if(dealerScore < 11){
+      dealerHand = dealerService.drawCards(1);
+      dealerScore = mapCardValueRules(dealerHand);
+      if(dealerScore < 15){
+        dealerHand = dealerService.drawCards(1);
+        dealerScore = mapCardValueRules(dealerHand);
+      }
+    }
+    if(dealerScore > 21){
+      _loseBetAmount();
+    }
+    return dealerScore;
+  }
+
+
   void _hit() {
     setState(() {
       playerHand.addAll(dealerService.drawCards(1));
     });
   }
 
+  void gameStatue(int player, int dealer){
+    if(player > 21){
+      print("Lose");
+    }else if (dealer > 21){
+      print("Win");
+    }else{
+      if(player == dealer){
+        print("Draw");
+      }else if(player > dealer){
+        print("Player Win");
+      }else {
+        print("Dealer win");
+      }
+    }
+
+
+  }
   void _double(){
     setState(() {
       print("Double HIt");
+      int playerScore = mapCardValueRules(playerHand);
       int lengthPlayerHand = playerHand.length;
-      if (lengthPlayerHand == 2){
-        playerHand.addAll(dealerService.drawCards(1));
-        _totalBetAmount = _totalBetAmount * 2;
-        int score = mapCardValueRules(playerHand);
-        print(score);
+      if( playerScore < 21 && lengthPlayerHand == 2){
+          playerHand.addAll(dealerService.drawCards(1));
+          _totalBetAmount = _totalBetAmount * 2;
+          playerScore = mapCardValueRules(playerHand);
+          int dealerScore = dealerAction();
+          print("playerScore : $playerScore");
+          print("DealerScore : $dealerScore");
+          gameStatue(playerScore, dealerScore);
+          // if(playerScore > 21){
+          //   print("lose");
+          //
+          // }
       }
-
     });
   }
 
