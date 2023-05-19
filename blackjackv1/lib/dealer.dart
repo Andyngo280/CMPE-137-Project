@@ -45,8 +45,7 @@ class Dealer extends DealerService {
     int deckSize = getDeckSize();
     int cardsLeft = deckSize - amount;
 
-    // Not enough cards left in deck?
-    // Remember to discard old cards
+
     if (cardsLeft < 0) {
       deck = [...shuffleDeck(discard), ...deck];
 
