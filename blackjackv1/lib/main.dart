@@ -6,23 +6,43 @@ import 'chipbet.dart';
 import 'package:flutter/material.dart';
 import 'package:playing_cards/playing_cards.dart';
 import 'options.dart';
-
+import 'package:just_audio/just_audio.dart';
+import 'audio_util.dart';
 
 void main() => runApp(const MyApp());
+
+
+
 class MyApp extends StatelessWidget //myApp
 {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
+    // loadAssetAudio();
+    // playBackgroundMusic();
+
+    AudioUtil.loadAssetAudio();
+    AudioUtil.playBackgroundMusic();
     return MaterialApp(
       routes: {
         'FirstPage':(context) => const FirstPage(),
         // 'SecondPage':(context) => SecondPage(),
-        // 'ThirdPage':(context) => const ThirdPage(),
+        'ThirdPage':(context) =>  ThirdPage(),
         'HomeChip':(context) => const HomeChip(),
       }, initialRoute: 'FirstPage',
     );
   }
+  // Future<void> loadAssetAudio() async {
+  //   await audioPlayer.setAsset('assets/music/bg.mp3');
+  // }
+  // void playBackgroundMusic() async {
+  //   await audioPlayer.play();
+  // }
+  //
+  // void stopBackgroundMusic() async {
+  //   await audioPlayer.stop();
+  // }
 }
 
 class FirstPage extends StatelessWidget //first page
@@ -73,27 +93,27 @@ class FirstPage extends StatelessWidget //first page
               ),
               //Button
               const SizedBox(height: 23),
-              // SizedBox(
-              //   width: 132,
-              //   height: 47,
-              //   child: ElevatedButton(
-              //       onPressed: () {
-              //         Navigator.push(
-              //           context,
-              //           MaterialPageRoute(
-              //               builder: (context) =>
-              //                   const ThirdPage()), //inputs string into constructor
-              //         ); //push as SecondPage on top of stack
-              //       },
-              //       style: ElevatedButton.styleFrom(
-              //         backgroundColor: Colors.black,
-              //         foregroundColor: Colors.white,
-              //         textStyle: const TextStyle(
-              //             fontSize: 26, fontWeight: FontWeight.bold),
-              //         shape: const StadiumBorder(),
-              //       ),
-              //       child: const Text('Options')),
-              // ),
+              SizedBox(
+                width: 132,
+                height: 47,
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                 ThirdPage()), //inputs string into constructor
+                      ); //push as SecondPage on top of stack
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      textStyle: const TextStyle(
+                          fontSize: 26, fontWeight: FontWeight.bold),
+                      shape: const StadiumBorder(),
+                    ),
+                    child: const Text('Options')),
+              ),
               const SizedBox(height: 23),
               SizedBox(
                 width: 88,
