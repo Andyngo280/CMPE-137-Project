@@ -3,8 +3,6 @@ import 'dealer.dart';
 import 'service.dart';
 import 'chipbet.dart';
 import 'package:playing_cards/playing_cards.dart';
-import 'package:flutter/material.dart';
-
 
 
 const HIGHES_SCORE_VALUE = 21;
@@ -36,13 +34,18 @@ class SecondPageState extends State<SecondPage> {
   final dealerService = Dealer();
   List<PlayingCard> playerHand = [];
   List<PlayingCard> dealerHand= [];
+  bool _cardsDealt = false;
 
   void _dealCards() {
     setState(() {
       playerHand.clear();
       dealerHand.clear();
+      _balance = widget.balance; // Reset balance to initial value
+      _totalBetAmount = widget.totalBetAmount; // Reset total bet amount to initial value
       playerHand = dealerService.drawCards(2);
       dealerHand = dealerService.drawCards(2);
+      dealerService.newDeck();
+      _cardsDealt = true; // Set _cardsDealt to true after dealing the cards
     }
     );
   }
@@ -65,33 +68,85 @@ class SecondPageState extends State<SecondPage> {
     return dealerScore;
   }
 
+  void _showResultDialog(String title, String message, String buttonText) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text(buttonText),
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                Navigator.pop(context); // Navigate back to the betting chip screen
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  void gameStatus(int playerScore, int dealerScore) {
+    if (playerScore > 21) {
+      setState(() {
+        _loseBetAmount();
+      });
+      Future.delayed(const Duration(milliseconds: 499), () {
+        _showResultDialog('Better luck next time!', 'You lost!', 'Go Back');
+      });
+    } else if (dealerScore > 21 || playerScore > dealerScore) {
+      setState(() {
+        // Player wins
+        widget.onWin(_totalBetAmount * 2); // Multiply the total bet amount by 2
+        if (_totalBetAmount > 0) {
+          _updateBalance(_totalBetAmount * 2); // Multiply the total bet amount by 2 to update balance
+          _resetTotalBetAmount();
+        }
+      });
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _showResultDialog('Congratulations!', 'You won!', 'Go Back');
+      });
+    } else if (playerScore < dealerScore) {
+      setState(() {
+        // Player loses
+        _loseBetAmount();
+      });
+      Future.delayed(const Duration(milliseconds: 499), () {
+        _showResultDialog('Better luck next time!', 'You lost!', 'Go Back');
+      });
+    } else {
+      setState(() {
+        _resetTotalBetAmount();
+      });
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _showResultDialog('It\'s a draw!', 'Draw!', 'Go Back');
+      });
+    }
+  }
+
 
   void _hit() {
     setState(() {
       playerHand.addAll(dealerService.drawCards(1));
+
+      int playerScore = mapCardValueRules(playerHand);
+      int dealerScore = dealerAction();
+
+      print("Player Score: $playerScore");
+      print("Dealer Score: $dealerScore");
+
+      gameStatus(playerScore, dealerScore);
     });
   }
 
-  void gameStatue(int player, int dealer){
-    if(player > 21){
-      print("Lose");
-    }else if (dealer > 21){
-      print("Win");
-    }else{
-      if(player == dealer){
-        print("Draw");
-      }else if(player > dealer){
-        print("Player Win");
-      }else {
-        print("Dealer win");
-      }
-    }
-
-
-  }
   void _double(){
     setState(() {
-      print("Double HIt");
+      print("Double Hit");
       int playerScore = mapCardValueRules(playerHand);
       int lengthPlayerHand = playerHand.length;
       if( playerScore < 21 && lengthPlayerHand == 2){
@@ -101,7 +156,7 @@ class SecondPageState extends State<SecondPage> {
           int dealerScore = dealerAction();
           print("playerScore : $playerScore");
           print("DealerScore : $dealerScore");
-          gameStatue(playerScore, dealerScore);
+          gameStatus(playerScore, dealerScore);
           // if(playerScore > 21){
           //   print("lose");
           //
@@ -175,48 +230,56 @@ class SecondPageState extends State<SecondPage> {
     });
   }
 
+
+
   void _loseBetAmount() {
     setState(() {
       _resetTotalBetAmount();
       if (_balance <= 0) {
-        showDialog(
-          context: context,
-          barrierDismissible: false, // user cannot dismiss the dialog by clicking outside
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Game Over!'),
-              content: const Text(
-                'You have no more money left to bet! Click Play Again to try again.',
-              ),
-              actions: <Widget>[
-                SizedBox(
-                  width: 125,
-                  height: 50.0,
-                  child: TextButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    ),
-                    child: const Text('Play Again', style: TextStyle(fontSize: 20.0)),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomeChip()));
-                      setState(() {
-                        _balance = 1000;
-                        _totalBetAmount = 0;
-                      });
-                      widget.onBalanceUpdate(_balance);
-                      widget.onResetTotalBetAmount(); // reset the total bet amount to zero
-                    },
-                  ),
+        // Display game over dialog with a delay
+        Future.delayed(const Duration(milliseconds: 500), () {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Game Over!'),
+                content: const Text(
+                  'You have no more money left to bet! Click Play Again to try again.',
                 ),
-              ],
-            );
-          },
-        );
-      }
-      else {
+                actions: <Widget>[
+                  SizedBox(
+                    width: 125,
+                    height: 50.0,
+                    child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue),
+                        foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                      ),
+                      child: const Text('Play Again', style: TextStyle(fontSize: 20.0)),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => const HomeChip()),
+                        );
+                        setState(() {
+                          _balance = 1000;
+                          _totalBetAmount = 0;
+                        });
+                        widget.onBalanceUpdate(_balance);
+                        widget.onResetTotalBetAmount(); // reset the total bet amount to zero
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        });
+      } else {
         widget.onBalanceUpdate(_balance);
         widget.onResetTotalBetAmount(); // reset the total bet amount to zero
       }
@@ -279,36 +342,35 @@ class SecondPageState extends State<SecondPage> {
                           fontSize: 32, fontWeight: FontWeight.bold)),
                 ],
               ),
-
               ElevatedButton(
-                onPressed: _hit,
+                onPressed: _cardsDealt ? _hit : null, // Disable the button if _cardsDealt is false
                 child: Text('Hit'),
               ),
               ElevatedButton(
-                  onPressed: _double,
-                  child: Text("Double")
-              ),
-              ElevatedButton(
-                child: const Text('Win!'),
-                onPressed: () {
-                  widget.onWin(_totalBetAmount * 2); // Multiply the total bet amount by 2
-                  if (_totalBetAmount > 0) {
-                    _updateBalance(_totalBetAmount * 2); // Multiply the total bet amount by 2 to update balance
-                    _resetTotalBetAmount();
-                  }
-                },
-              ),
-              ElevatedButton(
-                child: const Text('Lose'),
-                onPressed: () {
-                  _loseBetAmount();
-                },
+                onPressed: _cardsDealt ? _double : null, // Disable the button if _cardsDealt is false
+                child: Text('Double'),
               ),
               // ElevatedButton(
-              //     child: const Text('Go back'),
-              //     onPressed: () {
-              //       Navigator.pop(context); //pop the second page of the stack
-              //     }), //Button//Button
+              //   child: const Text('Win!'),
+              //   onPressed: () {
+              //     widget.onWin(_totalBetAmount * 2); // Multiply the total bet amount by 2
+              //     if (_totalBetAmount > 0) {
+              //       _updateBalance(_totalBetAmount * 2); // Multiply the total bet amount by 2 to update balance
+              //       _resetTotalBetAmount();
+              //     }
+              //   },
+              // ),
+              // ElevatedButton(
+              //   child: const Text('Lose'),
+              //   onPressed: () {
+              //     _loseBetAmount();
+              //   },
+              // ),
+              ElevatedButton(
+                  child: const Text('Go back'),
+                  onPressed: () {
+                    Navigator.pop(context); //pop the second page of the stack
+                  }), //Button//Button
             ],
           ),
         ), //Column)

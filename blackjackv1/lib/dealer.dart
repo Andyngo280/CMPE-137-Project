@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:playing_cards/playing_cards.dart';
 import 'package:blackjackv1/dealer.dart';
 
-/// The idea for the cards:
-/// @deck contains the rest of the deck
-/// @discardPile contains the discarded cards
-/// the rest is on the hand of each player
+
+
 class Dealer extends DealerService {
   List<PlayingCard> deck = [];
   List<PlayingCard> discard = [];
