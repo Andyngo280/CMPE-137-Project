@@ -31,6 +31,8 @@ class SecondPage extends StatefulWidget {
 class SecondPageState extends State<SecondPage> {
   int _balance = 0;
   int _totalBetAmount = 0;
+  int _playerScore = 0;
+  int _dealerScore = 0;
   final dealerService = Dealer();
   List<PlayingCard> playerHand = [];
   List<PlayingCard> dealerHand= [];
@@ -68,14 +70,22 @@ class SecondPageState extends State<SecondPage> {
     return dealerScore;
   }
 
-  void _showResultDialog(String title, String message, String buttonText) {
+  void _showResultDialog(String title, String message, String buttonText, int playerScore, int dealerScore) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: Text(message),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(message),
+              SizedBox(height: 10),
+              Text('Player Score: $playerScore'),
+              Text('Dealer Score: $dealerScore'),
+            ],
+          ),
           actions: <Widget>[
             TextButton(
               child: Text(buttonText),
@@ -97,7 +107,7 @@ class SecondPageState extends State<SecondPage> {
         _loseBetAmount();
       });
       Future.delayed(const Duration(milliseconds: 499), () {
-        _showResultDialog('Better luck next time!', 'You lost!', 'Go Back');
+        _showResultDialog('Better luck next time!', 'You lost!', 'Go Back', playerScore, dealerScore);
       });
     } else if (dealerScore > 21 || playerScore > dealerScore) {
       setState(() {
@@ -109,7 +119,7 @@ class SecondPageState extends State<SecondPage> {
         }
       });
       Future.delayed(const Duration(milliseconds: 300), () {
-        _showResultDialog('Congratulations!', 'You won!', 'Go Back');
+        _showResultDialog('Congratulations!', 'You won!', 'Go Back', playerScore, dealerScore);
       });
     } else if (playerScore < dealerScore) {
       setState(() {
@@ -117,14 +127,14 @@ class SecondPageState extends State<SecondPage> {
         _loseBetAmount();
       });
       Future.delayed(const Duration(milliseconds: 499), () {
-        _showResultDialog('Better luck next time!', 'You lost!', 'Go Back');
+        _showResultDialog('Better luck next time!', 'You lost!', 'Go Back', playerScore, dealerScore);
       });
     } else {
       setState(() {
         _resetTotalBetAmount();
       });
       Future.delayed(const Duration(milliseconds: 300), () {
-        _showResultDialog('It\'s a draw!', 'Draw!', 'Go Back');
+        _showResultDialog('It\'s a draw!', 'Draw!', 'Go Back', playerScore, dealerScore);
       });
     }
   }
@@ -139,6 +149,9 @@ class SecondPageState extends State<SecondPage> {
 
       print("Player Score: $playerScore");
       print("Dealer Score: $dealerScore");
+
+      _playerScore = playerScore;
+      _dealerScore = dealerScore;
 
       gameStatus(playerScore, dealerScore);
     });
@@ -156,6 +169,8 @@ class SecondPageState extends State<SecondPage> {
           int dealerScore = dealerAction();
           print("playerScore : $playerScore");
           print("DealerScore : $dealerScore");
+          _playerScore = playerScore;
+          _dealerScore = dealerScore;
           gameStatus(playerScore, dealerScore);
           // if(playerScore > 21){
           //   print("lose");
@@ -231,7 +246,6 @@ class SecondPageState extends State<SecondPage> {
   }
 
 
-
   void _loseBetAmount() {
     setState(() {
       _resetTotalBetAmount();
@@ -289,6 +303,14 @@ class SecondPageState extends State<SecondPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "BlackJack",
+          style: TextStyle(fontSize: 26),
+        ),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF1A4678),
+      ),
       body: DecoratedBox(
         // BoxDecoration takes the image
         decoration: const BoxDecoration(
@@ -302,23 +324,36 @@ class SecondPageState extends State<SecondPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 90),
-              Text('Click the button to deal 2 cards:'),
-              ElevatedButton(
-                onPressed: _dealCards,
-                child: Text('Deal'),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Bank: \$$_balance',
+                      style: const TextStyle(
+                          fontSize: 28, fontWeight: FontWeight.bold)),
+                  const SizedBox(width: 70),
+                  Text('In: \$$_totalBetAmount',
+                      style: const TextStyle(
+                          fontSize: 28, fontWeight: FontWeight.bold)),
+                ],
               ),
-              Expanded(
-                child: GridView.count(
-                  padding: const EdgeInsets.all(10),
-                  crossAxisCount: 2,
-                  children: playerHand.map((card) {
-                    return PlayingCardView(
-                      card: card,
-                    );
-                  }).toList(),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: 130,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: _dealCards,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1A4678),
+                    foregroundColor: Colors.white,
+                    textStyle:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    shape: const StadiumBorder(),
+                  ),
+                  child: const Text('Deal'),
                 ),
               ),
+              const SizedBox(height: 20),
               Expanded(
                 child: GridView.count(
                   padding: const EdgeInsets.all(10),
@@ -330,47 +365,74 @@ class SecondPageState extends State<SecondPage> {
                   }).toList(),
                 ),
               ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Dealer Score: $_dealerScore',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Bank: \$$_balance',
-                      style: const TextStyle(
-                          fontSize: 32, fontWeight: FontWeight.bold)),
-                  const SizedBox(width: 70),
-                  Text('In: \$$_totalBetAmount',
-                      style: const TextStyle(
-                          fontSize: 32, fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    width: 130,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: _cardsDealt ? _hit : null, // Disable the button if _cardsDealt is false
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1A4678),
+                        foregroundColor: Colors.white,
+                        textStyle:
+                        const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        shape: const StadiumBorder(),
+                      ),
+                      child: const Text('Hit'),
+                    ),
+                  ),
+                  const SizedBox(width: 40),
+                  SizedBox(
+                    width: 130,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: _cardsDealt ? _double : null, // Disable the button if _cardsDealt is false
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1A4678),
+                        foregroundColor: Colors.white,
+                        textStyle:
+                        const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        shape: const StadiumBorder(),
+                      ),
+                      child: Text('Double'),
+                    ),
+                  ),
                 ],
               ),
-              ElevatedButton(
-                onPressed: _cardsDealt ? _hit : null, // Disable the button if _cardsDealt is false
-                child: Text('Hit'),
+              const SizedBox(height: 25),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Player Score: $_playerScore',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
-              ElevatedButton(
-                onPressed: _cardsDealt ? _double : null, // Disable the button if _cardsDealt is false
-                child: Text('Double'),
+
+              Expanded(
+                child: GridView.count(
+                  padding: const EdgeInsets.all(10),
+                  crossAxisCount: 2,
+                  children: playerHand.map((card) {
+                    return PlayingCardView(
+                      card: card,
+                    );
+                  }).toList(),
+                ),
               ),
-              // ElevatedButton(
-              //   child: const Text('Win!'),
-              //   onPressed: () {
-              //     widget.onWin(_totalBetAmount * 2); // Multiply the total bet amount by 2
-              //     if (_totalBetAmount > 0) {
-              //       _updateBalance(_totalBetAmount * 2); // Multiply the total bet amount by 2 to update balance
-              //       _resetTotalBetAmount();
-              //     }
-              //   },
-              // ),
-              // ElevatedButton(
-              //   child: const Text('Lose'),
-              //   onPressed: () {
-              //     _loseBetAmount();
-              //   },
-              // ),
-              ElevatedButton(
-                  child: const Text('Go back'),
-                  onPressed: () {
-                    Navigator.pop(context); //pop the second page of the stack
-                  }), //Button//Button
             ],
           ),
         ), //Column)
