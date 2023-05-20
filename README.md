@@ -9,7 +9,7 @@ A new Flutter project.
 ```
 flutter pub get
 ```
-If ther is an error to install the package please try type
+If there is an error to install the package please try type
 
 ```
 flutter pub add PackageName
