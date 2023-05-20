@@ -26,4 +26,3 @@ flutter run --no-sound-null-safety
 
 # CMPE-137-Project
 Blackjack Game w/ Dart and Flutter
->>>>>>> a86ce4689b326c40f2a04bb7c48f7ddfedfadad8
