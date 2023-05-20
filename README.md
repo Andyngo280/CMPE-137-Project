@@ -4,7 +4,7 @@ A BlackJack flutter project.
 
 ## Getting Started
 To run the project on Android Studio without any out of bounds errors on the screen. Make sure the emulator screen size is at least 5.5 inches. But for the best user experience, 6 inches will be the perfect fit.
-We recommend using the Pixel 5 for the perfect screen.
+We recommend using the Pixel 5 emulator for the perfect screen.
 
 1. Download the project.
 2. To install the dependencies, run the following command:
