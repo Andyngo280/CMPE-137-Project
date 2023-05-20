@@ -165,8 +165,23 @@ class SecondPageState extends State<SecondPage> {
       });
     }
   }
-  void _stand(){
-    setState((){
+  // void _stand(){
+  //   setState((){
+  //     int playerScore = mapCardValueRules(playerHand);
+  //     int dealerScore = mapCardValueRules(dealerHand);
+  //
+  //     print("Player Score: $playerScore");
+  //     print("Dealer Score: $dealerScore");
+  //     _result = false;
+  //     _playerScore = playerScore;
+  //     _dealerScore = dealerScore;
+  //
+  //     gameStatus(playerScore, dealerScore);
+  //       });
+  // }
+
+  void _stand() {
+    setState(() {
       int playerScore = mapCardValueRules(playerHand);
       int dealerScore = mapCardValueRules(dealerHand);
 
@@ -176,8 +191,15 @@ class SecondPageState extends State<SecondPage> {
       _playerScore = playerScore;
       _dealerScore = dealerScore;
 
+      while (dealerScore < 17) {
+        dealerHand.addAll(dealerService.drawCards(1));
+        dealerScore = mapCardValueRules(dealerHand);
+        print("Dealer draws a card.");
+        print("Dealer Score: $dealerScore");
+      }
+
       gameStatus(playerScore, dealerScore);
-        });
+    });
   }
 
   void _hit() {
