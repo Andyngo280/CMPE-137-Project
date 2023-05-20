@@ -10,12 +10,13 @@ A new Flutter project.
 flutter pub get
 ```
 If there is an error to install the package please try type
-
 ```
+
 flutter pub add PackageName
 example:
 flutter pub add just_audio
 flutter pub add flutter_switch
+
 3. To run the program, run the following command:
 ```
 flutter run --no-sound-null-safety
