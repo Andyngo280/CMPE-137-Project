@@ -194,7 +194,9 @@ class SecondPageState extends State<SecondPage> {
       _playerScore = playerScore;
       _dealerScore = dealerScore;
 
-      gameStatus(playerScore, dealerScore);
+      if(playerScore >= 21 || dealerScore >= 21) {
+        gameStatus(playerScore, dealerScore);
+      }
     });
   }
 
