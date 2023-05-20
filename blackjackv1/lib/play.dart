@@ -35,28 +35,33 @@ class SecondPageState extends State<SecondPage> {
   int _totalBetAmount = 0;
   int _playerScore = 0;
   int _dealerScore = 0;
+  int _dealerScore2 = 0;
   final dealerService = Dealer();
   List<PlayingCard> playerHand = [];
   List<PlayingCard> dealerHand= [];
+  List<PlayingCard> dealerHand2= [];
   bool _cardsDealt = false;
   bool _result = true;
   void _dealCards() {
     setState(() {
       playerHand.clear();
       dealerHand.clear();
+      dealerHand2.clear();
+      _dealerScore2 = 0;
       _balance = widget.balance; // Reset balance to initial value
       _totalBetAmount = widget.totalBetAmount; // Reset total bet amount to initial value
       playerHand = dealerService.drawCards(2);
       dealerHand = dealerService.drawCards(2);
       dealerService.newDeck();
       _cardsDealt = true; // Set _cardsDealt to true after dealing the cards
-
+      dealerHand2.add(dealerHand[dealerHand.length -1]);
+      print(dealerHand2[0]);
       int playerScore = mapCardValueRules(playerHand);
-      int dealerScore = mapCardValueRules(dealerHand);
+      // int dealerScore = mapCardValueRules(dealerHand);
       _playerScore = playerScore;
-      _dealerScore = dealerScore;
+      _dealerScore2 = mapCardValueRules(dealerHand2);
       print("Player Score: $playerScore");
-      print("Dealer Score: $dealerScore");
+      print("Dealer Score: $_dealerScore");
     }
     );
   }
@@ -419,10 +424,10 @@ class SecondPageState extends State<SecondPage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Dealer Score: $_dealerScore',
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
+                  if(_result)
+                    Text('Dealer Score: $_dealerScore2', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
+                  else
+                    Text('Dealer Score: $_dealerScore', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
                 ],
               ),
               const SizedBox(height: 20),
