@@ -83,14 +83,19 @@ class SecondPageState extends State<SecondPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(title),
+          title: Center(
+            child: Text(
+              title,
+              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+            ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(message),
+              Text(message, style: TextStyle(fontSize: 22.0)),
               SizedBox(height: 10),
-              Text('Player Score: $playerScore'),
-              Text('Dealer Score: $dealerScore'),
+              Text('Player Score: $playerScore', style: const TextStyle(fontSize: 22.0)),
+              Text('Dealer Score: $dealerScore', style: const TextStyle(fontSize: 22.0)),
             ],
           ),
           actions: <Widget>[
@@ -115,6 +120,7 @@ class SecondPageState extends State<SecondPage> {
       });
       Future.delayed(const Duration(milliseconds: 499), () {
         _showResultDialog('Better luck next time!', 'You lost!', 'Go Back', playerScore, dealerScore);
+        print("You lose!");
       });
     } else if (dealerScore > 21 || playerScore > dealerScore) {
       setState(() {
@@ -127,6 +133,7 @@ class SecondPageState extends State<SecondPage> {
       });
       Future.delayed(const Duration(milliseconds: 300), () {
         _showResultDialog('Congratulations!', 'You won!', 'Go Back', playerScore, dealerScore);
+        print("You Win!");
       });
     } else if (playerScore < dealerScore) {
       setState(() {
@@ -135,6 +142,7 @@ class SecondPageState extends State<SecondPage> {
       });
       Future.delayed(const Duration(milliseconds: 499), () {
         _showResultDialog('Better luck next time!', 'You lost!', 'Go Back', playerScore, dealerScore);
+        print("You lose!");
       });
     } else {
       setState(() {
@@ -142,6 +150,7 @@ class SecondPageState extends State<SecondPage> {
       });
       Future.delayed(const Duration(milliseconds: 300), () {
         _showResultDialog('It\'s a draw!', 'Draw!', 'Go Back', playerScore, dealerScore);
+        print("Draw!");
       });
     }
   }
@@ -264,9 +273,14 @@ class SecondPageState extends State<SecondPage> {
             barrierDismissible: false,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text('Game Over!'),
-                content: const Text(
-                  'You have no more money left to bet! Click Play Again to try again.',
+                title: const Text('Game Over!',style: TextStyle(
+                    fontSize: 28, fontWeight: FontWeight.bold)),
+                content: Container(
+                  width: 175, // Set the desired width
+                  height: 110, // Set the desired height
+                  child: const Text(
+                    'You have no more money left to bet! Click Play Again to try again.',
+                      style: TextStyle(fontSize: 24)),
                 ),
                 actions: <Widget>[
                   SizedBox(
@@ -274,10 +288,8 @@ class SecondPageState extends State<SecondPage> {
                     height: 50.0,
                     child: TextButton(
                       style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue),
-                        foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF1A4678)),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       ),
                       child: const Text('Play Again', style: TextStyle(fontSize: 20.0)),
                       onPressed: () {
