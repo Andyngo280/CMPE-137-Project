@@ -159,7 +159,20 @@ class SecondPageState extends State<SecondPage> {
       });
     }
   }
+  void _stand(){
+    setState((){
+      int playerScore = mapCardValueRules(playerHand);
+      int dealerScore = mapCardValueRules(dealerHand);
 
+      print("Player Score: $playerScore");
+      print("Dealer Score: $dealerScore");
+
+      _playerScore = playerScore;
+      _dealerScore = dealerScore;
+
+      gameStatus(playerScore, dealerScore);
+        });
+  }
 
   void _hit() {
     setState(() {
@@ -412,12 +425,12 @@ class SecondPageState extends State<SecondPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 130,
+                    width: 100,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: _cardsDealt ? _hit : null, // Disable the button if _cardsDealt is false
@@ -431,9 +444,25 @@ class SecondPageState extends State<SecondPage> {
                       child: const Text('Hit'),
                     ),
                   ),
-                  const SizedBox(width: 40),
+                  const SizedBox(width: 25),
                   SizedBox(
-                    width: 130,
+                    width: 100,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: _cardsDealt ? _stand : null, // Disable the button if _cardsDealt is false
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1A4678),
+                        foregroundColor: Colors.white,
+                        textStyle:
+                        const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        shape: const StadiumBorder(),
+                      ),
+                      child: const Text('Stand'),
+                    ),
+                  ),
+                  const SizedBox(width: 25),
+                  SizedBox(
+                    width: 110,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: _cardsDealt ? _double : null, // Disable the button if _cardsDealt is false
