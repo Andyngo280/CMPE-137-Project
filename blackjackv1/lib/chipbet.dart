@@ -111,19 +111,19 @@ class BettingScreenState extends State<BettingScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(height: 160),
+        const SizedBox(height: 100),
         SizedBox(
-          width: 120,
-          height: 50,
+          width: 230,
+          height: 70,
           child: ElevatedButton(
             onPressed: _reset,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF9A1B1B),
+              backgroundColor: const Color(0xFF0E5D10),
               foregroundColor: Colors.white,
               textStyle: const TextStyle(
-                  fontSize: 28, fontWeight: FontWeight.bold),
+                  fontSize: 36, fontWeight: FontWeight.bold),
             ),
-            child: const Text('Reset'),
+            child: const Text('Play Again!'),
           ),
         ),
         const SizedBox(height: 20),
