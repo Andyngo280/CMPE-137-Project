@@ -280,7 +280,7 @@ class SecondPageState extends State<SecondPage> {
                 title: const Text('Game Over!',style: TextStyle(
                     fontSize: 28, fontWeight: FontWeight.bold)),
                 content: Container(
-                  width: 175, // Set the desired width
+                  width: 300, // Set the desired width
                   height: 110, // Set the desired height
                   child: const Text(
                     'You have no more money left to bet! Click Play Again to try again.',
@@ -393,7 +393,7 @@ class SecondPageState extends State<SecondPage> {
                 children: [
                   Text(
                     'Dealer Score: $_dealerScore',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -429,7 +429,7 @@ class SecondPageState extends State<SecondPage> {
                         const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                         shape: const StadiumBorder(),
                       ),
-                      child: Text('Double'),
+                      child: const Text('Double'),
                     ),
                   ),
                 ],
@@ -440,7 +440,7 @@ class SecondPageState extends State<SecondPage> {
                 children: [
                   Text(
                     'Player Score: $_playerScore',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
