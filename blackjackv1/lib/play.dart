@@ -172,7 +172,7 @@ class SecondPageState extends State<SecondPage> {
 
       print("Player Score: $playerScore");
       print("Dealer Score: $dealerScore");
-
+      _result = false;
       _playerScore = playerScore;
       _dealerScore = dealerScore;
 
@@ -186,6 +186,7 @@ class SecondPageState extends State<SecondPage> {
 
       int playerScore = mapCardValueRules(playerHand);
       int dealerScore = dealerAction();
+      _result = false;
 
       print("Player Score: $playerScore");
       print("Dealer Score: $dealerScore");
@@ -212,6 +213,7 @@ class SecondPageState extends State<SecondPage> {
           _playerScore = playerScore;
           _dealerScore = dealerScore;
           gameStatus(playerScore, dealerScore);
+          _result = false;
           // if(playerScore > 21){
           //   print("lose");
           //
