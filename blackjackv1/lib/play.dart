@@ -42,6 +42,7 @@ class SecondPageState extends State<SecondPage> {
   List<PlayingCard> dealerHand2= [];
   bool _cardsDealt = false;
   bool _result = true;
+  bool _hitButtonEnabled = true;
   void _dealCards() {
     setState(() {
       playerHand.clear();
@@ -170,20 +171,6 @@ class SecondPageState extends State<SecondPage> {
       });
     }
   }
-  // void _stand(){
-  //   setState((){
-  //     int playerScore = mapCardValueRules(playerHand);
-  //     int dealerScore = mapCardValueRules(dealerHand);
-  //
-  //     print("Player Score: $playerScore");
-  //     print("Dealer Score: $dealerScore");
-  //     _result = false;
-  //     _playerScore = playerScore;
-  //     _dealerScore = dealerScore;
-  //
-  //     gameStatus(playerScore, dealerScore);
-  //       });
-  // }
 
   void _stand() {
     setState(() {
@@ -207,8 +194,12 @@ class SecondPageState extends State<SecondPage> {
     });
   }
 
-  void _hit() {
-    setState(() {
+  void _hit() async {
+    if (_hitButtonEnabled) {
+      setState(() {
+        _hitButtonEnabled = false; // Disable the hit button
+      });
+
       playerHand.addAll(dealerService.drawCards(1));
 
       int playerScore = mapCardValueRules(playerHand);
@@ -221,12 +212,16 @@ class SecondPageState extends State<SecondPage> {
       _playerScore = playerScore;
       _dealerScore = dealerScore;
 
-      if(playerScore >= 21 || dealerScore >= 21) {
+      if (playerScore >= 21 || dealerScore >= 21) {
         gameStatus(playerScore, dealerScore);
       }
-    });
-  }
 
+      await Future.delayed(const Duration(seconds: 2)); // Add a delay of 2 seconds
+      setState(() {
+        _hitButtonEnabled = true; // Enable the hit button after the delay
+      });
+    }
+  }
   void _double(){
     setState(() {
       print("Double Hit");
@@ -251,17 +246,17 @@ class SecondPageState extends State<SecondPage> {
     });
   }
 
-  int mapStandardCardValue(int cardEnumIdex) {
+  int mapStandardCardValue(int cardEnumIndex) {
     // ignore: constant_identifier_names
     const GAP_BETWEEN_INDEX_AND_VALUE = 2;
 
     // Card value 2-10 -> index between 0 and 8
-    if (0 <= cardEnumIdex && cardEnumIdex <= 8) {
-      return cardEnumIdex + GAP_BETWEEN_INDEX_AND_VALUE;
+    if (0 <= cardEnumIndex && cardEnumIndex <= 8) {
+      return cardEnumIndex + GAP_BETWEEN_INDEX_AND_VALUE;
     }
 
     // Card is jack, queen, king -> index between90 and 11
-    if (9 <= cardEnumIdex && cardEnumIdex <= 11) {
+    if (9 <= cardEnumIndex && cardEnumIndex <= 11) {
       return 10;
     }
 
