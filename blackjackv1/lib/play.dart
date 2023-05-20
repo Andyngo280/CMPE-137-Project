@@ -100,7 +100,11 @@ class SecondPageState extends State<SecondPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(buttonText),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF1A4678)),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              ),
+              child: Text(buttonText, style: TextStyle(fontSize: 20.0)),
               onPressed: () {
                 Navigator.pop(context); // Close the dialog
                 Navigator.pop(context); // Navigate back to the betting chip screen
