@@ -48,6 +48,13 @@ class SecondPageState extends State<SecondPage> {
       dealerHand = dealerService.drawCards(2);
       dealerService.newDeck();
       _cardsDealt = true; // Set _cardsDealt to true after dealing the cards
+
+      int playerScore = mapCardValueRules(playerHand);
+      int dealerScore = mapCardValueRules(dealerHand);
+      _playerScore = playerScore;
+      _dealerScore = dealerScore;
+      print("Player Score: $playerScore");
+      print("Dealer Score: $dealerScore");
     }
     );
   }
