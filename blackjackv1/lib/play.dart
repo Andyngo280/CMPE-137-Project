@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'dealer.dart';
 import 'service.dart';
@@ -37,8 +39,7 @@ class SecondPageState extends State<SecondPage> {
   List<PlayingCard> playerHand = [];
   List<PlayingCard> dealerHand= [];
   bool _cardsDealt = false;
-  int dealerCardLength  = 0;
-  int playerCardLength = 0;
+  bool _result = true;
   void _dealCards() {
     setState(() {
       playerHand.clear();
@@ -59,6 +60,7 @@ class SecondPageState extends State<SecondPage> {
     }
     );
   }
+
 
   int dealerAction(){
     int dealerScore = mapCardValueRules(dealerHand);
@@ -121,6 +123,7 @@ class SecondPageState extends State<SecondPage> {
   void gameStatus(int playerScore, int dealerScore) {
     if (playerScore > 21) {
       setState(() {
+        _result = false;
         _loseBetAmount();
       });
       Future.delayed(const Duration(milliseconds: 499), () {
@@ -133,6 +136,7 @@ class SecondPageState extends State<SecondPage> {
         widget.onWin(_totalBetAmount * 2); // Multiply the total bet amount by 2
         if (_totalBetAmount > 0) {
           _updateBalance(_totalBetAmount * 2); // Multiply the total bet amount by 2 to update balance
+          _result = false;
           _resetTotalBetAmount();
         }
       });
@@ -143,6 +147,7 @@ class SecondPageState extends State<SecondPage> {
     } else if (playerScore < dealerScore) {
       setState(() {
         // Player loses
+        _result = false;
         _loseBetAmount();
       });
       Future.delayed(const Duration(milliseconds: 499), () {
@@ -151,6 +156,7 @@ class SecondPageState extends State<SecondPage> {
       });
     } else {
       setState(() {
+        _result = false;
         _resetTotalBetAmount();
       });
       Future.delayed(const Duration(milliseconds: 300), () {
@@ -379,30 +385,20 @@ class SecondPageState extends State<SecondPage> {
               ),
               SizedBox(
                   height: 200,
-                  width: dealerHand.length * 90,
+                  width: dealerHand.length * 85,
                   child: FlatCardFan(children: [
                     for (var card in dealerHand) ...[
-                      CardAnimatedWidget(card, true,3.0 )
+                      if (_result)
+                          if (card != dealerHand[dealerHand.length -1])
+                            CardAnimatedWidget(card, true,3.0 )
+                          else
+                            CardAnimatedWidget(card, false,3.0 )
+                      else
+                        CardAnimatedWidget(card, false,3.0 )
                     ]
                   ],
                   ),
               ),
-              // Expanded(
-              //   child: FlatCardFan(children: [
-              //     for (var card in dealerHand) ...[
-              //       CardAnimatedWidget(card, true, 3.0)
-              //     ]
-              //     ])
-              //   // GridView.count(
-              //   //   padding: const EdgeInsets.all(10),
-              //   //   crossAxisCount: 2,
-              //   //   children: dealerHand.map((card) {
-              //   //     return PlayingCardView(
-              //   //       card: card,
-              //   //     );
-              //   //   }).toList(),
-              //   // ),
-              // ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -469,24 +465,6 @@ class SecondPageState extends State<SecondPage> {
                 ],
                 ),
               ),
-              // Expanded(
-              //   child: FlatCardFan(children: [
-              //     for (var card in playerHand) ...[
-              //       CardAnimatedWidget(card, false, 3.0)
-              //     ]
-              //   ])
-              //
-              //   // GridView.count(
-              //   //   padding: const EdgeInsets.all(10),
-              //   //   crossAxisCount: 2,
-              //   //   children:
-              //   //   playerHand.map((card) {
-              //   //     return PlayingCardView(
-              //   //       card: card,
-              //   //     );
-              //   //   }).toList(),
-              //   // ),
-              // ),
             ],
           ),
         ), //Column)
