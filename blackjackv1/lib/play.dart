@@ -3,7 +3,7 @@ import 'dealer.dart';
 import 'service.dart';
 import 'chipbet.dart';
 import 'package:playing_cards/playing_cards.dart';
-
+import 'card.dart';
 
 const HIGHES_SCORE_VALUE = 21;
 class SecondPage extends StatefulWidget {
@@ -37,7 +37,8 @@ class SecondPageState extends State<SecondPage> {
   List<PlayingCard> playerHand = [];
   List<PlayingCard> dealerHand= [];
   bool _cardsDealt = false;
-
+  int dealerCardLength  = 0;
+  int playerCardLength = 0;
   void _dealCards() {
     setState(() {
       playerHand.clear();
@@ -376,18 +377,32 @@ class SecondPageState extends State<SecondPage> {
                   child: const Text('Deal'),
                 ),
               ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: GridView.count(
-                  padding: const EdgeInsets.all(10),
-                  crossAxisCount: 2,
-                  children: dealerHand.map((card) {
-                    return PlayingCardView(
-                      card: card,
-                    );
-                  }).toList(),
-                ),
+              SizedBox(
+                  height: 200,
+                  width: dealerHand.length * 90,
+                  child: FlatCardFan(children: [
+                    for (var card in dealerHand) ...[
+                      CardAnimatedWidget(card, true,3.0 )
+                    ]
+                  ],
+                  ),
               ),
+              // Expanded(
+              //   child: FlatCardFan(children: [
+              //     for (var card in dealerHand) ...[
+              //       CardAnimatedWidget(card, true, 3.0)
+              //     ]
+              //     ])
+              //   // GridView.count(
+              //   //   padding: const EdgeInsets.all(10),
+              //   //   crossAxisCount: 2,
+              //   //   children: dealerHand.map((card) {
+              //   //     return PlayingCardView(
+              //   //       card: card,
+              //   //     );
+              //   //   }).toList(),
+              //   // ),
+              // ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -444,18 +459,34 @@ class SecondPageState extends State<SecondPage> {
                   ),
                 ],
               ),
-
-              Expanded(
-                child: GridView.count(
-                  padding: const EdgeInsets.all(10),
-                  crossAxisCount: 2,
-                  children: playerHand.map((card) {
-                    return PlayingCardView(
-                      card: card,
-                    );
-                  }).toList(),
+              SizedBox(
+                height: 200,
+                width: playerHand.length * 90,
+                child: FlatCardFan(children: [
+                  for (var card in playerHand) ...[
+                    CardAnimatedWidget(card, false,3.0 )
+                  ]
+                ],
                 ),
               ),
+              // Expanded(
+              //   child: FlatCardFan(children: [
+              //     for (var card in playerHand) ...[
+              //       CardAnimatedWidget(card, false, 3.0)
+              //     ]
+              //   ])
+              //
+              //   // GridView.count(
+              //   //   padding: const EdgeInsets.all(10),
+              //   //   crossAxisCount: 2,
+              //   //   children:
+              //   //   playerHand.map((card) {
+              //   //     return PlayingCardView(
+              //   //       card: card,
+              //   //     );
+              //   //   }).toList(),
+              //   // ),
+              // ),
             ],
           ),
         ), //Column)
