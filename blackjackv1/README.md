@@ -18,6 +18,7 @@ example:
 flutter pub add just_audio
 flutter pub add flutter_switch
 ```
+3. Run the program.
 If there is an error when trying to run the program, run the following command:
 ```
 flutter run --no-sound-null-safety
